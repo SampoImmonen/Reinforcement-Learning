@@ -30,9 +30,10 @@ if __name__ == '__main__':
 
     threshold = 10000
     sync_interval = 1000
-    gamma  = 0.99
 
-    experience_source = ExperienceSource(env, capacity=50000, device=device)
+    n_steps = 2
+    gamma = 0.99
+    experience_source = ExperienceSource(env, capacity=50000,gamma=gamma, n_steps=n_steps, device=device)
     
     best_reward = 0
     batch_size = 32
@@ -42,7 +43,7 @@ if __name__ == '__main__':
 
     t1 = time.time()
 
-    logger = Logger("BoxingBasic", 10, complete_limit=50)
+    logger = Logger("Boxing2Step", 10, complete_limit=50)
 
 
     print("starting training")
@@ -58,7 +59,7 @@ if __name__ == '__main__':
         batch = experience_source.sample(batch_size, as_tensor=True)
         
         optimizer.zero_grad()
-        loss = calculate_loss(batch, net, target_net, gamma, doubleQ=False)
+        loss = calculate_loss(batch, net, target_net, gamma**(n_steps), doubleQ=False)
         loss.backward()
         optimizer.step()
 

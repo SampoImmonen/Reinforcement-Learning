@@ -42,10 +42,13 @@ class ReplayBuffer:
 
 class ExperienceSource:
     
-    def __init__(self, env, capacity=10000, device="cpu"):
+    def __init__(self, env, n_steps=1, gamma=0.99, capacity=10000, device="cpu"):
         
         self.env = env
         self.state = self.env.reset()
+        
+        self.n_steps = n_steps
+        self.gamma = gamma
             
         self.buffer = ReplayBuffer(capacity)
         
@@ -64,20 +67,37 @@ class ExperienceSource:
 
         state = self.state
         state_tensor  = torch.FloatTensor(state).unsqueeze(0).to(self.device)
-            
-
-
+        
         with torch.no_grad():
             act = net(state_tensor).max(1)[1].item()
         
-        obs, reward, isdone, _ = self.env.step(act)
-        exp = Experience(state, act, obs, reward, isdone)
-        self.buffer.push(exp)
-        
         self.episode_steps+=1
+        obs, reward, isdone, _ = self.env.step(act)
+        first_action = act
+        total_reward = reward
+        self.episode_reward+=reward
+
+        #Loop to enroll bellman equation
+        if (not isdone):
+            for i in range(self.n_steps-1):
+                
+                state_tensor = torch.FloatTensor(obs).unsqueeze(0).to(self.device)
+                with torch.no_grad():
+                    act = net(state_tensor).max(1)[1].item()
+                obs, reward, isdone, _  = self.env.step(act)
+                total_reward+=(self.gamma**(i+1))*reward
+
+                self.episode_reward+=reward
+                self.episode_steps+=1
+
+                if isdone:
+                    break
+
+        exp = Experience(state, first_action, obs, total_reward, isdone)
+        
+        self.buffer.push(exp)  
         self.steps_done+=1
         
-        self.episode_reward+=reward
         if isdone:
             self.state = self.env.reset()
             episode_reward = self.episode_reward
