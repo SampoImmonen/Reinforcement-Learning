@@ -16,3 +16,8 @@ Deep Reinforcement learning with pytorch
 
 6. Noisy Networks for Exploration (https://arxiv.org/abs/1706.10295)
 
+7. Revisiting Fundamentals of Experience Replay (https://arxiv.org/pdf/2007.06700.pdf)
+    1. Connection between Replay Memory capacity and oldest policy
+    2. special connection between n-step DQN and replay memory capacity
+
+8. A Distributional Perspective on Reinforcement Learning (https://arxiv.org/pdf/1707.06887.pdf)
