@@ -1,6 +1,8 @@
+import json
 import os
-import torch
 import time
+import torch
+
 
 
 def check_dir(name):
@@ -8,13 +10,19 @@ def check_dir(name):
         os.makedirs(name)
 
 class Logger:
-    def __init__(self, save_dir, interval, best_reward = 0,complete_limit=None, stop_limit=None):
+    def __init__(self, config, best_reward = 0,complete_limit=None, stop_limit=None):
        
-        self.save_dir = save_dir
+        self.save_dir = config['log_dir']
+        check_dir(self.save_dir)
         
-        check_dir(save_dir)
+        config_path = os.path.join(self.save_dir, "config.json")
+        
+        with open(config_path, 'w') as f:
+            json.dump(config, f)
 
-        self.interval = interval
+        self.episode_stats_path = os.path.join(self.save_dir, 'episode_stats.txt')
+
+        self.interval = config['log_interval']
         self.episodes = []
         self.episode_losses=[]
         self.episode_loss = []
@@ -37,6 +45,9 @@ class Logger:
                 self.episode_loss = []
                 
             if len(self.episodes)%self.interval==0:
+
+                self._writetofile()
+
                 interval = time.time()-self.start_time
                 mean_stats = self._mean_stats()
                 mean_reward, mean_length, mean_loss = mean_stats                
@@ -63,3 +74,11 @@ class Logger:
         mean_length = sum([episode[1] for episode in self.episodes[-self.interval:]])/self.interval
         mean_loss = sum(loss for loss in self.episode_losses[-self.interval:])/self.interval 
         return (mean_reward, mean_length, mean_loss)
+
+    def _writetofile(self):
+
+        with open(self.episode_stats_path, 'a') as f:
+            for ep in self.episodes[-self.interval:]:
+                f.write(str(ep)+'\n')
+
+        return

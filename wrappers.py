@@ -68,9 +68,60 @@ class ArrayFromObs(gym.ObservationWrapper):
     def observation(self, observation):
         return observation.__array__()
 
+class FireResetEnv(gym.Wrapper):
+    """
+    From https://github.com/openai/baselines/blob/master/baselines/common/atari_wrappers.py
+    """
+    def __init__(self, env=None):
+        """For environments where the user need to press FIRE for the game to start."""
+        super(FireResetEnv, self).__init__(env)
+        assert env.unwrapped.get_action_meanings()[1] == 'FIRE'
+        assert len(env.unwrapped.get_action_meanings()) >= 3
 
-def make_env_basic(name, frameskip=4, crop=None):
+    def step(self, action):
+        return self.env.step(action)
+
+    def reset(self):
+        self.env.reset()
+        obs, _, done, _ = self.env.step(1)
+        if done:
+            self.env.reset()
+        obs, _, done, _ = self.env.step(2)
+        if done:
+            self.env.reset()
+        return obs
+
+class EpisodicLifeEnv(gym.Wrapper):
+    def __init__(self, env):
+        """Make end-of-life == end-of-episode, but only reset on true game over.
+        Done by DeepMind for the DQN and co. since it helps value estimation.
+        """
+        gym.Wrapper.__init__(self, env)
+        self.lives = 0
+        self.was_real_done  = True
+
+    def step(self, action):
+        obs, reward, done, info = self.env.step(action)
+        self.was_real_done = done
+        # check current lives, make loss of life terminal,
+        # then update lives to handle bonus lives
+        lives = self.env.unwrapped.ale.lives()
+        if lives < self.lives and lives > 0:
+            # for Qbert sometimes we stay in lives == 0 condition for a few frames
+            # so it's important to keep lives > 0, so that we only reset once
+            # the environment advertises done.
+            done = True
+        self.lives = lives
+        return obs, reward, done, info
+
+def make_env_basic(name, frameskip=4, crop=None, episodic=False, firereset=False):
     env = gym.make(name)
+
+    if episodic:
+        env = EpisodicLifeEnv(env)
+    if firereset:
+        env = FireResetEnv(env)
+        
     env = SkipFrame(env, frameskip)
     env = GrayScaleObservation(env)
     env = ResizeObservation(env, shape=84, crop=crop)

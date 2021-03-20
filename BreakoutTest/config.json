@@ -1,0 +1,1 @@
+{"env": "BreakoutNoFrameskip-v4", "frameskip": 4, "lr": 0.0001, "batch_size": 32, "train_threshold": 10000, "buffer_capacity": 100000, "gamma": 0.99, "n_steps": 2, "device": "cuda", "step_interval": 1, "log_interval": 10, "sync_interval": 10, "doubleQ": false, "log_dir": "BreakoutTest", "dueling": true, "noisy": true}
