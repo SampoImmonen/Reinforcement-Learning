@@ -4,6 +4,9 @@ Deep Reinforcement learning with pytorch
 
 
 ## Key articles:
+
+##DQN
+
 1. Playing Atari with Deep Reinforcement Learning (https://arxiv.org/abs/1312.5602)
 
 2. Rainbow: Combining Improvements in Deep Reinforcement Learning (https://arxiv.org/abs/1710.02298)
@@ -21,3 +24,13 @@ Deep Reinforcement learning with pytorch
     2. special connection between n-step DQN and replay memory capacity
 
 8. A Distributional Perspective on Reinforcement Learning (https://arxiv.org/pdf/1707.06887.pdf)
+
+
+## Dreamer:
+
+1. DREAM TO CONTROL: LEARNING BEHAVIORS
+BY LATENT IMAGINATION (https://arxiv.org/pdf/1912.01603.pdf)
+
+2. Mastering Atari with Discrete World Models (https://arxiv.org/abs/2010.02193)
+
+3. Learning Latent Dynamics for Planning from Pixels (https://arxiv.org/pdf/1811.04551.pdf)
