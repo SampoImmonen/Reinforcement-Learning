@@ -8,7 +8,17 @@ dueling_noisy_92,9
 Test
 *run
 sketches
+BreakoutTest
+PongTestrun
+pong_video_images
+Pong21DuelingNoisy
+images
+
+
+
 
 __pycache__
+
+
 
 
