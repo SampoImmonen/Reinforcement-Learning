@@ -13,9 +13,7 @@ PongTestrun
 pong_video_images
 Pong21DuelingNoisy
 images
-
-
-
+*images
 
 __pycache__
 
