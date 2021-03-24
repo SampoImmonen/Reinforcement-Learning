@@ -34,3 +34,15 @@ BY LATENT IMAGINATION (https://arxiv.org/pdf/1912.01603.pdf)
 2. Mastering Atari with Discrete World Models (https://arxiv.org/abs/2010.02193)
 
 3. Learning Latent Dynamics for Planning from Pixels (https://arxiv.org/pdf/1811.04551.pdf)
+
+# Videos:
+
+## Pong (DQN)
+![pong](./videos/pong.gif)
+
+## Boxing (DQN)
+![boxing](./videos/boxing.gif)
+## Breakout (DQN)
+![breakout](./videos/breakout.gif)
+## LunarLander (A2C)
+![lander](./videos/LunarLanderA2C.gif)

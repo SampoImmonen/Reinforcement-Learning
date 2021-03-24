@@ -1,11 +1,11 @@
 import time
 import torch
 
-from wrappers import make_env_basic
-from utils import ExperienceSource
-from models import DuelingNoisyConvNet
-from dqn import calculate_loss
-from logger import Logger
+from RLlib.wrappers import make_env_basic
+from RLlib.utils import ExperienceSource
+from RLlib.models import DuelingNoisyConvNet
+from RLlib.dqn import calculate_loss
+from RLlib.logger import Logger
 
 
 
@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     #define parameters
     config = {
-        'env' : 'BreakoutNoFrameskip-v4',
+        'env' : 'PongNoFrameskip-v4',
         'frameskip' : 4,
         'lr' : 0.0001,
         'batch_size' : 32,
@@ -26,9 +26,9 @@ if __name__ == '__main__':
         'device': 'cuda',
         'step_interval': 1,
         'log_interval': 10,
-        'sync_interval': 10,
+        'sync_interval': 1000,
         'doubleQ': False,
-        'log_dir' : 'BreakoutTest',
+        'log_dir' : 'Pongtestrun',
         'dueling': True,
         'noisy': True
     }
@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     #Implement Logic to choose network
     net = DuelingNoisyConvNet((config['frameskip'], 84,84), output_dim).to(device)
-    net.load_state_dict(torch.load("BreakoutTest/checkpoint_eps3050_reward16.7.pt"))
+    #net.load_state_dict(torch.load("BreakoutTest/checkpoint_eps3050_reward16.7.pt"))
     target_net = DuelingNoisyConvNet((config['frameskip'], 84,84), output_dim).to(device)
     target_net.load_state_dict(net.state_dict())
 
