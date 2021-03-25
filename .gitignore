@@ -1,5 +1,7 @@
 #Model files
 *.pt
+*.mp4
+
 
 #directories
 boxing_video_images
@@ -18,5 +20,5 @@ images
 __pycache__
 
 
-*.mp4
+
 

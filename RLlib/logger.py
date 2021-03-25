@@ -8,12 +8,31 @@ import torch
 def check_dir(name):
     if not os.path.exists(name):
         os.makedirs(name)
+        return True
+    return False
+
+
+
 
 class Logger:
-    def __init__(self, config, best_reward = 0,complete_limit=None, stop_limit=None):
+
+    """
+    class used for tracking results, printing inforformation and saving checkpoints
+    """
+    def __init__(self, config, best_reward = -21,complete_limit=None, stop_limit=None):
        
         self.save_dir = config['log_dir']
-        check_dir(self.save_dir)
+        check_dir(self.save_dir)   
+        i = 1
+
+        #Create new directory for every run 
+        while True:
+            run_path = os.path.join(self.save_dir, f"run{i}")
+            if check_dir(run_path):
+                break
+            i+=1
+        self.save_dir=run_path
+
         
         config_path = os.path.join(self.save_dir, "config.json")
         
@@ -60,7 +79,9 @@ class Logger:
                     num_eps = len(self.episodes)
                     torch.save(net.state_dict(), self.save_dir+"/"+f"checkpoint_eps{num_eps}_reward{mean_reward}.pt")
                     self.best_reward = mean_reward
-                    
+                    if self.stop_limit!=None and mean_reward > self.stop_limit:
+                        return True
+        return False
                     
     def push_loss(self, loss):
         """

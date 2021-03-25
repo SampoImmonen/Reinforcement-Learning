@@ -7,7 +7,11 @@ from RLlib.models import DuelingNoisyConvNet
 from RLlib.dqn import calculate_loss
 from RLlib.logger import Logger
 
+"""
+Script for Training DQN Agents on Atari games
+Sampo Immonen 2021
 
+"""
 
 if __name__ == '__main__':
 
@@ -30,7 +34,8 @@ if __name__ == '__main__':
         'doubleQ': False,
         'log_dir' : 'Pongtestrun',
         'dueling': True,
-        'noisy': True
+        'noisy': True,
+        'from_checkpoint': ''
     }
 
     print("initializing parameters")
@@ -66,15 +71,17 @@ if __name__ == '__main__':
 
     doubleQ = config['doubleQ']
 
-    logger = Logger(config)
+    logger = Logger(config, stop_limit=-20.8)
 
-
+    #Training Loop
     print("starting training")
     while True:
-        #print("starting iter")
+
         episode_reward = experience_source.step(net)
 
-        logger.push_episode(episode_reward, net)        
+        if (logger.push_episode(episode_reward, net)):
+            print("Stop Limit reached stopping training")     
+            break
 
         steps_done = experience_source.get_steps()
         if  steps_done < threshold:
