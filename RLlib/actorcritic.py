@@ -22,4 +22,4 @@ def get_batch(batch, net, n_steps, gamma=0.99):
     rewards[done_mask] = rewards[done_mask]+Q_vals.data.cpu().numpy()[:,0]*(gamma**n_steps)
     
     
-    return torch.FloatTensor(states), torch.tensor(acts, dtype=torch.int64), torch.FloatTensor(rewards)
+    return (torch.FloatTensor(states), torch.tensor(acts, dtype=torch.int64), torch.FloatTensor(rewards))
