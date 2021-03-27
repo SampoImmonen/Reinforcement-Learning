@@ -43,6 +43,13 @@ BY LATENT IMAGINATION (https://arxiv.org/pdf/1912.01603.pdf)
 
 3. Learning Latent Dynamics for Planning from Pixels (https://arxiv.org/pdf/1811.04551.pdf)
 
+
+## Deep Neuroevolution:
+
+1. Deep Neuroevolution: Genetic Algorithms are a Competitive Alternative for
+Training Deep Neural Networks for Reinforcement Learning (https://arxiv.org/pdf/1712.06567.pdf
+)
+
 # Videos:
 
 ## Pong (DQN)
