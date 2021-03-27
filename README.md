@@ -2,6 +2,14 @@
 
 Deep Reinforcement learning with pytorch
 
+## Things to Do:
+1. A3C for Atari
+2. DreamerV2 
+3. multiprocessing version of DQN
+4. priorization sampling fo replay buffer
+5. distributional DQN
+6. Continuous action spaces????
+
 
 ## Key articles:
 

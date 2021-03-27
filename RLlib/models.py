@@ -206,3 +206,73 @@ class ValueNet(nn.Module):
                         )
     def forward(self, input):
         return self.net(input)
+
+
+class ConvPolicyNet(nn.Module):
+    """
+    Policy net used with Atari environments
+    """
+
+    def __init__(self, input_dim, output_dim, hidden_size=512):
+        super(ConvPolicyNet, self).__init__()
+        
+        self.conv = nn.Sequential(
+            nn.Conv2d(input_dim[0], 32, kernel_size=8, stride=4),
+            nn.ELU(),
+            nn.Conv2d(32, 64, kernel_size=4, stride=2),
+            nn.ELU(),
+            nn.Conv2d(64, 64, kernel_size=3, stride=1),
+            nn.ELU()
+        )
+
+        out_size = self._get_conv_out(input_dim)
+
+        self.fc = nn.Sequential(nn.Linear(out_size, hidden_size), 
+                                nn.ELU(), nn.Linear(hidden_size, hidden_size),
+                                nn.ELU(), nn.Linear(hidden_size, output_dim)
+                                )
+
+    def _get_conv_out(self, shape):
+        o = self.conv(torch.zeros(1, *shape))
+        return int(np.prod(o.size()))
+
+    def forward(self, input):
+        x = self.conv(input)
+        x = x.view(x.shape[0], -1)
+        return self.fc(x)
+
+
+class A3CSharedConvNet(nn.Module):
+    """
+    Basic A3C network with shared features for policy and value
+    """
+    def __init__(self, input_dim, output_dim, hidden_size = 512):
+        
+        super(A3CSharedConvNet, self).__init__()
+        self.conv = nn.Sequential(
+            nn.Conv2d(input_dim[0], 32, kernel_size=8, stride=4),
+            nn.ELU(),
+            nn.Conv2d(32, 64, kernel_size=4, stride=2),
+            nn.ELU(),
+            nn.Conv2d(64, 64, kernel_size=3, stride=1),
+            nn.ELU()
+        )
+        
+        out_size = self._get_conv_out(input_dim)
+        self.policy = nn.Sequential(nn.Linear(out_size, hidden_size),
+                                    nn.ELU(), nn.Linear(hidden_size, output_dim)
+                                   )
+        self.value = nn.Sequential(nn.Linear(out_size, hidden_size),
+                                   nn.ELU(), nn.Linear(hidden_size, 1)
+                                  )
+
+    def _get_conv_out(self, shape):
+        o = self.conv(torch.zeros(1, *shape))
+        return int(np.prod(o.size()))
+
+    def forward(self, input):
+        x = self.conv(input)
+        x = x.view(x.shape[0], -1)
+        policy_logits = self.policy(x)
+        value = self.value(x)
+        return policy_logits, value
