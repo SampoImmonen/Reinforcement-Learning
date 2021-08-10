@@ -13,7 +13,7 @@ Deep Reinforcement learning with pytorch
 
 ## Key articles:
 
-##DQN
+## DQN
 
 1. Playing Atari with Deep Reinforcement Learning (https://arxiv.org/abs/1312.5602)
 
