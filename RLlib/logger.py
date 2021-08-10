@@ -6,18 +6,20 @@ import torch
 
 
 def check_dir(name):
+    """
+    function to check if directory exists
+    if not then creates directory
+    """
     if not os.path.exists(name):
         os.makedirs(name)
         return True
     return False
 
 
-
-
 class Logger:
 
     """
-    class used for tracking results, printing inforformation and saving checkpoints
+    class used for tracking results, printing information and saving checkpoints
     """
     def __init__(self, config, best_reward = -21,complete_limit=None, stop_limit=None):
        

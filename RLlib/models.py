@@ -276,3 +276,22 @@ class A3CSharedConvNet(nn.Module):
         policy_logits = self.policy(x)
         value = self.value(x)
         return policy_logits, value
+
+
+
+class ContinuousPolicyNet(nn.Module):
+    
+    def __init__(self, input_dim, output_dim, hidden_size=512):
+        super(ContinuousPolicyNet, self).__init__()
+        
+        self.base = nn.Sequential(nn.Linear(input_dim, hidden_size), nn.ELU(),
+                                  nn.Linear(hidden_size, hidden_size), nn.ELU())
+        
+        self.mean = nn.Sequential(nn.Linear(hidden_size, output_dim), nn.Tanh())
+        self.var  = nn.Sequential(nn.Linear(hidden_size, output_dim), nn.Softplus())
+        
+    def forward(self, input):
+        x = self.base(input)
+        mean = self.mean(x)
+        var = self.var(x)
+        return mean, var

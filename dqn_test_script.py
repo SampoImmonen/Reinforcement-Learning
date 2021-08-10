@@ -71,14 +71,14 @@ if __name__ == '__main__':
 
     doubleQ = config['doubleQ']
 
-    logger = Logger(config, stop_limit=-20.8)
+    #set stop limit to approriate value for the specific environment
+    logger = Logger(config, stop_limit=15.0)
 
     #Training Loop
     print("starting training")
     while True:
 
         episode_reward = experience_source.step(net)
-
         if (logger.push_episode(episode_reward, net)):
             print("Stop Limit reached stopping training")     
             break

@@ -6,6 +6,10 @@ from moviepy.editor import *
 from PIL import Image
 import torch
 
+"""
+file contains tools to record videos of RLagents in action
+"""
+
 
 
 def mp4_to_gif(video_path, gif_path):
