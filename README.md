@@ -1,6 +1,7 @@
 # Reinforcement-Learning
 
-Deep Reinforcement learning with pytorch
+Deep reinforcement learning with Pytorch. This repo is used for recreating deep reinforcement learning algorithms with pytorch
+
 
 ## Things to Do:
 1. A3C for Atari
@@ -8,8 +9,7 @@ Deep Reinforcement learning with pytorch
 3. multiprocessing version of DQN
 4. priorization sampling fo replay buffer
 5. distributional DQN
-6. Continuous action spaces????
-
+6. Continuous action spaces
 
 ## Key articles:
 
